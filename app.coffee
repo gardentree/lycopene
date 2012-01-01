@@ -3,6 +3,7 @@
 
 express = require('express')
 routes = require('./routes')
+io = require('socket.io')
 
 app = module.exports = express.createServer()
 
@@ -34,4 +35,16 @@ app.get('/', routes.index)
 port = process.env.PORT || 3000
 app.listen(port, ->
   console.log("Listening on " + port)
+)
+
+##########
+users = []
+
+socket = io.listen(app)
+socket.sockets.on('connection',(client) ->
+  users.push(client)
+  client.on('notify',(data) =>
+    for user in users
+      user.emit(data.command)
+  )
 )

@@ -1,2 +1,11 @@
-h1= title
-p Welcome to #{title}
+script(src='/javascripts/clock.js')
+script(type='text/javascript')
+  var controller;
+  $(document).ready(function() {
+    controller = build($('#canvas'))
+  });
+
+button(onclick='controller.start();') Start
+button(onclick='controller.stop();') Stop
+div(id='canvas')
+

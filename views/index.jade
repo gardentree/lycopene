@@ -2,10 +2,20 @@ script(src='/javascripts/clock.js')
 script(type='text/javascript')
   var controller;
   $(document).ready(function() {
-    controller = build($('#canvas'))
+    controller = build(function(state,minute,second) {
+      canvas = $('#canvas');
+      canvas.empty();
+
+      cover = $('<div/>').addClass(state);
+      canvas.append(cover);
+
+      cover.append($('<span/>').append(minute));
+      cover.append($('<span/>').append(':'));
+      cover.append($('<span/>').append(second));
+    })
   });
 
-button(onclick='controller.start();') Start
-button(onclick='controller.stop();') Stop
 div(id='canvas')
 
+button(onclick='controller.start();') Start
+button(onclick='controller.pause();') Pause

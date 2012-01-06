@@ -14,7 +14,7 @@ app.configure( ->
   app.set('view engine', 'jade')
   app.use(express.bodyParser())
   app.use(express.methodOverride())
-  app.use(require('stylus').middleware({ src: __dirname + '/public' }));
+  app.use(require('stylus').middleware({ src: __dirname + '/public' }))
   app.use(express.cookieParser())
   app.use(express.session({ secret: 'your secret here' }))
   app.use(app.router)
@@ -22,11 +22,11 @@ app.configure( ->
 )
 
 app.configure('development', ->
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })) 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 )
 
 app.configure('production', ->
-  app.use(express.errorHandler()) 
+  app.use(express.errorHandler())
 )
 
 # Routes
@@ -39,13 +39,69 @@ app.listen(port, ->
 )
 
 ##########
-users = []
+getNow = ->
+  Math.floor(new Date().getTime() / 1000)
+
+class Playing
+  constructor: (state,remain)->
+    @state    = state
+    @command = 'start'
+    @time    = remain
+    @starting   = getNow()
+  remain: =>
+    @time - (getNow() - @starting)
+  start: =>
+    this
+  pause: =>
+    new Pausing(@state,@remain())
+
+class Pausing
+  constructor: (state,remain)->
+    @state        = state
+    @command     = 'pause'
+    @remain_time = remain
+  remain: =>
+    @remain_time
+  start: =>
+    new Playing(@state,@remain_time)
+  pause: =>
+    this
+
+##########
+users = {}
+
+status = new Pausing('working',15)
+
+emit = (command,data)->
+  user.emit(command,data) for id,user of users
 
 socket = io.listen(app)
 socket.sockets.on('connection',(client) ->
-  users.push(client)
-  client.on('notify',(data) =>
-    for user in users
-      user.emit(data.command)
+  users[client.id] = client
+
+  client.on('start',(data) =>
+    status = status.start()
+    emit('start',{state: status.state,remain: status.remain()})
   )
+  client.on('pause',(data) =>
+    status = status.pause()
+    emit('pause',{state: status.state,remain: status.remain()})
+  )
+  client.on('synchronize',(data) =>
+    emit(status.command,{state: status.state,remain: status.remain()})
+  )
+  client.on('disconnect', =>
+    console.log("disconnect #{client}")
+    delete users[client.id]
+  )
+
+  setInterval(->
+    if status.remain() <= 0
+      switch status.state
+        when 'working'
+          status = new Playing('resting',3)
+        when 'resting'
+          status = new Playing('working',15)
+      emit('start',{state: status.state,remain: status.remain()})
+  ,1000)
 )

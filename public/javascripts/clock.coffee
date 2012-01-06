@@ -3,43 +3,39 @@ class Binder
     @linkage    = linkage
     @clock      = clock
     @controller = controller
-  bind: (name) =>
-    @controller[name] = =>
-      @linkage.emit('notify',{command: name})
-    @linkage.on(name,@clock[name])
+  bind: (command) =>
+    @controller[command] = =>
+      @linkage.emit(command)
+    @linkage.on(command,@clock[command])
 
-WORKING_TIME = 1500
-BREAK_TIME   = 300
 class Clock
-  constructor: (canvas) ->
-    @canvas  = canvas
-    @time    = WORKING_TIME
-    @working = true
-    @draw()
-
-  start: =>
-    @timer = setInterval(@beat,1000)
-
-  stop: =>
+  constructor: (redraw) ->
+    @redraw  = redraw
+    @time =
+      state : 'pausing'
+      remain: -1
+  start: (time)=>
+    @time = time
+    @timer = setInterval(@beat,1000) if !@timer?
+  pause: (time)=>
     clearInterval(@timer)
+    @timer = null
 
-  beat: =>
-    @time--
-    if @time <= 0
-      @working = !@working
-      if @working
-        @time = WORKING_TIME
-      else
-        @time = BREAK_TIME
+    @time = time
+    @draw()
+  synchronize: (time)=>
+    @time = time
 
     @draw()
+  beat: =>
+    @time.remain--
 
+    @draw()
   draw: =>
-    second = ('0' + (@time % 60)).slice(-2)
-    minute = ('0' + ((@time - second) / 60)).slice(-2)
+    second = ('0' + (@time.remain % 60)).slice(-2)
+    minute = ('0' + ((@time.remain - second) / 60)).slice(-2)
 
-    @canvas.empty()
-    @canvas.append("<span>#{minute}</span><span>:</span><span>#{second}</span>")
+    @redraw(@time.state,minute,second)
 
 window.build = (canvas) ->
   clock = new Clock(canvas)
@@ -47,6 +43,10 @@ window.build = (canvas) ->
 
   binder = new Binder(io.connect('/'),clock,controller)
   binder.bind('start')
-  binder.bind('stop')
+  binder.bind('pause')
+  binder.bind('synchronize')
+  
+  controller.synchronize()
 
   controller
+

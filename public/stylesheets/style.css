@@ -1,0 +1,16 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00b7ff;
+}
+#canvas span {
+  font-size: 76pt;
+}
+.working {
+  background-color: #f00;
+}
+.resting {
+  background-color: #00f;
+}

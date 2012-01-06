@@ -1,5 +1,5 @@
 (function() {
-  var BREAK_TIME, Binder, Clock, WORKING_TIME,
+  var Binder, Clock,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Binder = (function() {
@@ -10,63 +10,59 @@
       this.controller = controller;
     }
 
-    Binder.prototype.bind = function(name) {
+    Binder.prototype.bind = function(command) {
       var _this = this;
-      this.controller[name] = function() {
-        return _this.linkage.emit('notify', {
-          command: name
-        });
+      this.controller[command] = function() {
+        return _this.linkage.emit(command);
       };
-      return this.linkage.on(name, this.clock[name]);
+      return this.linkage.on(command, this.clock[command]);
     };
 
     return Binder;
 
   })();
 
-  WORKING_TIME = 1500;
-
-  BREAK_TIME = 300;
-
   Clock = (function() {
 
-    function Clock(canvas) {
+    function Clock(redraw) {
       this.draw = __bind(this.draw, this);
       this.beat = __bind(this.beat, this);
-      this.stop = __bind(this.stop, this);
-      this.start = __bind(this.start, this);      this.canvas = canvas;
-      this.time = WORKING_TIME;
-      this.working = true;
-      this.draw();
+      this.synchronize = __bind(this.synchronize, this);
+      this.pause = __bind(this.pause, this);
+      this.start = __bind(this.start, this);      this.redraw = redraw;
+      this.time = {
+        state: 'pausing',
+        remain: -1
+      };
     }
 
-    Clock.prototype.start = function() {
-      return this.timer = setInterval(this.beat, 1000);
+    Clock.prototype.start = function(time) {
+      this.time = time;
+      if (!(this.timer != null)) return this.timer = setInterval(this.beat, 1000);
     };
 
-    Clock.prototype.stop = function() {
-      return clearInterval(this.timer);
+    Clock.prototype.pause = function(time) {
+      clearInterval(this.timer);
+      this.timer = null;
+      this.time = time;
+      return this.draw();
+    };
+
+    Clock.prototype.synchronize = function(time) {
+      this.time = time;
+      return this.draw();
     };
 
     Clock.prototype.beat = function() {
-      this.time--;
-      if (this.time <= 0) {
-        this.working = !this.working;
-        if (this.working) {
-          this.time = WORKING_TIME;
-        } else {
-          this.time = BREAK_TIME;
-        }
-      }
+      this.time.remain--;
       return this.draw();
     };
 
     Clock.prototype.draw = function() {
       var minute, second;
-      second = ('0' + (this.time % 60)).slice(-2);
-      minute = ('0' + ((this.time - second) / 60)).slice(-2);
-      this.canvas.empty();
-      return this.canvas.append("<span>" + minute + "</span><span>:</span><span>" + second + "</span>");
+      second = ('0' + (this.time.remain % 60)).slice(-2);
+      minute = ('0' + ((this.time.remain - second) / 60)).slice(-2);
+      return this.redraw(this.time.state, minute, second);
     };
 
     return Clock;
@@ -79,7 +75,9 @@
     controller = new Object();
     binder = new Binder(io.connect('/'), clock, controller);
     binder.bind('start');
-    binder.bind('stop');
+    binder.bind('pause');
+    binder.bind('synchronize');
+    controller.synchronize();
     return controller;
   };
 

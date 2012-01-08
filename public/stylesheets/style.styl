@@ -1,15 +1,28 @@
 body
-  padding: 50px
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  min-width: 320px
+  text-align: center
 a
   color: #00B7FF
 
-#canvas
-  span
-    font-size: 76pt
+#clock
+  margin: 0 auto;  
+  width: 320px
 
+//state 
 .working
-  background-color: #FF0000
+  background-color: silver
 .resting
-  background-color: #0000FF
+  background-color: forestgreen
+.pausing
+  background-color: gold
 
+// 
+.number
+  font-family: 'Inconsolata', sans-serif
+  background-color: #ccc
+  border: 1px solid #000
+  border-radius: 8px
+  box-shadow: 8px 8px 24px #333
+  font-size: 72pt
+  margin: 0px 8px 0px 8px
+  padding:8px 8px 8px 8px

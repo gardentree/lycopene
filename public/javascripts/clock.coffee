@@ -22,20 +22,20 @@ class Clock
     @timer = null
 
     @time = time
-    @draw()
+    @draw('pausing')
   synchronize: (time)=>
     @time = time
 
-    @draw()
+    @draw(@time.state)
   beat: =>
     @time.remain--
 
-    @draw()
-  draw: =>
+    @draw(@time.state)
+  draw: (state)=>
     second = ('0' + (@time.remain % 60)).slice(-2)
     minute = ('0' + ((@time.remain - second) / 60)).slice(-2)
 
-    @redraw(@time.state,minute,second)
+    @redraw(state,minute,second)
 
 window.build = (canvas) ->
   clock = new Clock(canvas)

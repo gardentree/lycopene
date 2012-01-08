@@ -45,24 +45,24 @@
       clearInterval(this.timer);
       this.timer = null;
       this.time = time;
-      return this.draw();
+      return this.draw('pausing');
     };
 
     Clock.prototype.synchronize = function(time) {
       this.time = time;
-      return this.draw();
+      return this.draw(this.time.state);
     };
 
     Clock.prototype.beat = function() {
       this.time.remain--;
-      return this.draw();
+      return this.draw(this.time.state);
     };
 
-    Clock.prototype.draw = function() {
+    Clock.prototype.draw = function(state) {
       var minute, second;
       second = ('0' + (this.time.remain % 60)).slice(-2);
       minute = ('0' + ((this.time.remain - second) / 60)).slice(-2);
-      return this.redraw(this.time.state, minute, second);
+      return this.redraw(state, minute, second);
     };
 
     return Clock;

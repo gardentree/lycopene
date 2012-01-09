@@ -38,7 +38,10 @@ app.listen(port, ->
   console.log("Listening on " + port)
 )
 
-##########
+#---------
+config = require("./config/environments/#{process.env.NODE_ENV||'development'}")
+
+#---------
 getNow = ->
   Math.floor(new Date().getTime() / 1000)
 
@@ -67,10 +70,10 @@ class Pausing
   pause: =>
     this
 
-##########
+#---------
 users = {}
 
-status = new Pausing('working',15)
+status = new Pausing('working',config.working)
 
 emit = (command,data)->
   user.emit(command,data) for id,user of users
@@ -99,9 +102,9 @@ socket.sockets.on('connection',(client) ->
     if status.remain() <= 0
       switch status.state
         when 'working'
-          status = new Playing('resting',3)
+          status = new Playing('resting',config.resting)
         when 'resting'
-          status = new Playing('working',15)
+          status = new Playing('working',config.working)
       emit('start',{state: status.state,remain: status.remain()})
   ,1000)
 )

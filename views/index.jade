@@ -3,18 +3,27 @@ script(type='text/javascript')
   var controller;
   $(document).ready(function() {
     controller = build(function(state,minute,second) {
-      $('#cover').attr('class',state);
+      $('#time').attr('class',state);
       $('#minute').text(minute);
       $('#second').text(second);
+    })
+
+    cover = $('#cover')
+    cover.show();
+    controller.ping(function() {
+      controller.synchronize();
+      cover.hide();
     })
   });
   document.body.style.zoom=2
 
 div#clock
-  div#cover
+  div#time
     span#minute.number 00
     span#second.number 00
 
   button(onclick='controller.start();') Start
   button(onclick='controller.pause();') Pause
 
+div#cover 
+  div Now Connecting...

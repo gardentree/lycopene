@@ -70,14 +70,19 @@
   })();
 
   window.build = function(canvas) {
-    var binder, clock, controller;
+    var binder, clock, controller, linkage,
+      _this = this;
     clock = new Clock(canvas);
     controller = new Object();
-    binder = new Binder(io.connect('/'), clock, controller);
+    linkage = io.connect('/');
+    binder = new Binder(linkage, clock, controller);
     binder.bind('start');
     binder.bind('pause');
     binder.bind('synchronize');
-    controller.synchronize();
+    controller.ping = function(callback) {
+      linkage.on('ping', callback);
+      return linkage.emit('ping');
+    };
     return controller;
   };
 

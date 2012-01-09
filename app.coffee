@@ -91,7 +91,10 @@ socket.sockets.on('connection',(client) ->
     emit('pause',{state: status.state,remain: status.remain()})
   )
   client.on('synchronize',(data) =>
-    emit(status.command,{state: status.state,remain: status.remain()})
+    client.emit(status.command,{state: status.state,remain: status.remain()})
+  )
+  client.on('ping',=>
+    client.emit('ping')
   )
   client.on('disconnect', =>
     console.log("disconnect #{client}")

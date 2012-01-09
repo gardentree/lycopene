@@ -41,12 +41,15 @@ window.build = (canvas) ->
   clock = new Clock(canvas)
   controller = new Object()
 
-  binder = new Binder(io.connect('/'),clock,controller)
+  linkage = io.connect('/')
+  binder = new Binder(linkage,clock,controller)
   binder.bind('start')
   binder.bind('pause')
   binder.bind('synchronize')
   
-  controller.synchronize()
+  controller.ping = (callback)=>
+    linkage.on('ping',callback)
+    linkage.emit('ping')
 
   controller
 

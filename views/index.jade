@@ -22,8 +22,9 @@ div#clock
     span#minute.number 00
     span#second.number 00
 
-  button(onclick='controller.start();') Start
-  button(onclick='controller.pause();') Pause
+  div#controller
+    button#start.button(onclick='controller.start();') Start
+    button#pause.button(onclick='controller.pause();') Pause
 
 div#cover 
   div Now Connecting...

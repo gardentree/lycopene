@@ -2,6 +2,7 @@ body {
   background-color: #000;
   min-width: 320px;
   text-align: center;
+  font-family: 'Inconsolata', sans-serif;
 }
 a {
   color: #00b7ff;
@@ -9,6 +10,47 @@ a {
 #clock {
   margin: 0 auto;
   width: 320px;
+  height: 320px;
+}
+#time {
+  padding: 16px 8px 16px 8px;
+  border: 1px solid;
+}
+.working {
+  background-color: #c0c0c0;
+}
+.resting {
+  background-color: #228b22;
+}
+.pausing {
+  background-color: #ffd700;
+}
+.number {
+  background-color: #ccc;
+  border: 1px solid #000;
+  border-radius: 8px;
+  box-shadow: 8px 8px 24px #333;
+  font-size: 72pt;
+  margin: 0px 8px 0px 8px;
+}
+#controller {
+  padding: 16px 16px 16px 16px;
+  background-color: #dcdcdc;
+  border: 1px solid;
+}
+.button {
+  font-size: 24pt;
+  width: 120px;
+  border: 1px solid;
+  padding: 0px 0px 0px 0px;
+}
+#start {
+  margin: 0px -1px 0px 0px;
+  border-radius: 4px 0px 0px 4px;
+}
+#pause {
+  margin: 0px 0px 0px -1px;
+  border-radius: 0px 4px 4px 0px;
 }
 #cover {
   width: 100%;
@@ -24,23 +66,4 @@ a {
 #cover div {
   top: 50%;
   position: relative;
-}
-.working {
-  background-color: #c0c0c0;
-}
-.resting {
-  background-color: #228b22;
-}
-.pausing {
-  background-color: #ffd700;
-}
-.number {
-  font-family: 'Inconsolata', sans-serif;
-  background-color: #ccc;
-  border: 1px solid #000;
-  border-radius: 8px;
-  box-shadow: 8px 8px 24px #333;
-  font-size: 72pt;
-  margin: 0px 8px 0px 8px;
-  padding: 8px 8px 8px 8px;
 }

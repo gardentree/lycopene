@@ -8,11 +8,11 @@ script(type='text/javascript')
       $('#second').text(second);
     })
 
-    cover = $('#cover')
-    cover.show();
+    connecting = $('#connecting')
+    connecting.show();
     controller.ping(function() {
       controller.synchronize();
-      cover.hide();
+      connecting.hide();
     })
   });
   document.body.style.zoom=2
@@ -26,5 +26,5 @@ div#clock
     button#start.button(onclick='controller.start();') Start
     button#pause.button(onclick='controller.pause();') Pause
 
-div#cover 
+div#connecting 
   div Now Connecting...

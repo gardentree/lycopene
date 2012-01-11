@@ -1,4 +1,5 @@
 script(src='/javascripts/clock.js')
+script(src='/javascripts/sound.js')
 script(type='text/javascript')
   var controller;
   $(document).ready(function() {
@@ -17,14 +18,16 @@ script(type='text/javascript')
   });
   document.body.style.zoom=2
 
+  var audio = new Audio("/sounds/button.wav");
+
 div#clock
   div#time
     span#minute.number 00
     span#second.number 00
 
   div#controller
-    button#start.button(onclick='controller.start();') Start
-    button#pause.button(onclick='controller.pause();') Pause
+    button#start.button(onclick='audio.play();controller.start();') Start
+    button#pause.button(onclick='audio.play();controller.pause();') Pause
 
 div#connecting 
   div Now Connecting...

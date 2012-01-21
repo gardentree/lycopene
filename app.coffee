@@ -55,25 +55,34 @@ class Playing
     @time - (getNow() - @starting)
   start: =>
     this
-  pause: =>
-    new Pausing(@state,@remain())
+  stop: =>
+    new Ready()
 
-class Pausing
-  constructor: (state,remain)->
-    @state        = state
-    @command     = 'pause'
-    @remain_time = remain
+class Ready
+  constructor: ->
+    @command = 'stop'
   remain: =>
-    @remain_time
+    config.working
   start: =>
-    new Playing(@state,@remain_time)
-  pause: =>
+    new Playing('working',config.working)
+  stop: =>
     this
 
+# class Pausing
+#   constructor: (state,remain)->
+#     @state        = state
+#     @command     = 'stop'
+#     @remain_time = remain
+#   remain: =>
+#     @remain_time
+#   start: =>
+#     new Playing(@state,@remain_time)
+#   stop: =>
+#     this
 #---------
 users = {}
 
-status = new Pausing('working',config.working)
+status = new Ready()
 
 emit = (command,data)->
   user.emit(command,data) for id,user of users
@@ -86,11 +95,11 @@ socket.sockets.on('connection',(client) ->
     status = status.start()
     emit('start',{state: status.state,remain: status.remain()})
   )
-  client.on('pause',(data) =>
-    status = status.pause()
-    emit('pause',{state: status.state,remain: status.remain()})
+  client.on('stop',(data) =>
+    status = status.stop()
+    emit('stop',{state: status.state,remain: status.remain()})
   )
-  client.on('synchronize',(data) =>
+  client.on('synchronize', =>
     client.emit(status.command,{state: status.state,remain: status.remain()})
   )
   client.on('ping',=>

@@ -28,24 +28,25 @@
       this.draw = __bind(this.draw, this);
       this.beat = __bind(this.beat, this);
       this.synchronize = __bind(this.synchronize, this);
-      this.pause = __bind(this.pause, this);
+      this.stop = __bind(this.stop, this);
       this.start = __bind(this.start, this);      this.redraw = redraw;
       this.time = {
-        state: 'pausing',
+        state: 'ready',
         remain: -1
       };
     }
 
     Clock.prototype.start = function(time) {
+      console.log(time);
       this.time = time;
       if (!(this.timer != null)) return this.timer = setInterval(this.beat, 1000);
     };
 
-    Clock.prototype.pause = function(time) {
+    Clock.prototype.stop = function(time) {
       clearInterval(this.timer);
       this.timer = null;
       this.time = time;
-      return this.draw('pausing');
+      return this.draw('ready');
     };
 
     Clock.prototype.synchronize = function(time) {
@@ -77,7 +78,7 @@
     linkage = io.connect('/');
     binder = new Binder(linkage, clock, controller);
     binder.bind('start');
-    binder.bind('pause');
+    binder.bind('stop');
     binder.bind('synchronize');
     controller.ping = function(callback) {
       linkage.on('ping', callback);

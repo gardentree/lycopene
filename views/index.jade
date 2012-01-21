@@ -1,10 +1,17 @@
 script(src='/javascripts/clock.js')
-script(src='/javascripts/sound.js')
 script(type='text/javascript')
   var controller;
   $(document).ready(function() {
+    var current = '';
     controller = build(function(state,minute,second) {
-      $('#time').attr('class',state);
+      if (current != state) {
+        console.log(state);
+        $('#time').attr('class',state);
+        $('#controller').html($('#' + state).html());
+        
+        current = state;
+      }
+
       $('#minute').text(minute);
       $('#second').text(second);
     })
@@ -26,8 +33,14 @@ div#clock
     span#second.number 00
 
   div#controller
-    button#start.button(onclick='audio.play();controller.start();') Start
-    button#pause.button(onclick='audio.play();controller.pause();') Pause
 
 div#connecting 
   div Now Connecting...
+
+div(style="display: none;")
+  div#ready
+    button#button1.button(onclick='audio.play();controller.start();') Start
+  div#working
+    button#button1.button(onclick='audio.play();controller.stop();') Stop
+  div#resting
+    button#button1.button(onclick='audio.play();controller.stop();') Stop

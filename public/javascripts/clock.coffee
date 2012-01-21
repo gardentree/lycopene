@@ -12,17 +12,18 @@ class Clock
   constructor: (redraw) ->
     @redraw  = redraw
     @time =
-      state : 'pausing'
+      state : 'ready'
       remain: -1
   start: (time)=>
+    console.log(time)
     @time = time
     @timer = setInterval(@beat,1000) if !@timer?
-  pause: (time)=>
+  stop: (time)=>
     clearInterval(@timer)
     @timer = null
 
     @time = time
-    @draw('pausing')
+    @draw('ready')
   synchronize: (time)=>
     @time = time
 
@@ -44,7 +45,7 @@ window.build = (canvas) ->
   linkage = io.connect('/')
   binder = new Binder(linkage,clock,controller)
   binder.bind('start')
-  binder.bind('pause')
+  binder.bind('stop')
   binder.bind('synchronize')
   
   controller.ping = (callback)=>

@@ -25,6 +25,9 @@ a {
 .ready {
   background-color: #ffd700;
 }
+.abort {
+  background-color: #f00;
+}
 .number {
   background-color: #ccc;
   border: 1px solid #000;

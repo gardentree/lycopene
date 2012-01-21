@@ -25,8 +25,10 @@
   Clock = (function() {
 
     function Clock(redraw) {
+      this.stopTimer = __bind(this.stopTimer, this);
       this.draw = __bind(this.draw, this);
       this.beat = __bind(this.beat, this);
+      this.abort = __bind(this.abort, this);
       this.synchronize = __bind(this.synchronize, this);
       this.stop = __bind(this.stop, this);
       this.start = __bind(this.start, this);      this.redraw = redraw;
@@ -37,14 +39,12 @@
     }
 
     Clock.prototype.start = function(time) {
-      console.log(time);
       this.time = time;
       if (!(this.timer != null)) return this.timer = setInterval(this.beat, 1000);
     };
 
     Clock.prototype.stop = function(time) {
-      clearInterval(this.timer);
-      this.timer = null;
+      this.stopTimer();
       this.time = time;
       return this.draw('ready');
     };
@@ -52,6 +52,11 @@
     Clock.prototype.synchronize = function(time) {
       this.time = time;
       return this.draw(this.time.state);
+    };
+
+    Clock.prototype.abort = function() {
+      this.stopTimer();
+      return this.draw('abort');
     };
 
     Clock.prototype.beat = function() {
@@ -64,6 +69,11 @@
       second = ('0' + (this.time.remain % 60)).slice(-2);
       minute = ('0' + ((this.time.remain - second) / 60)).slice(-2);
       return this.redraw(state, minute, second);
+    };
+
+    Clock.prototype.stopTimer = function() {
+      clearInterval(this.timer);
+      return this.timer = null;
     };
 
     return Clock;
@@ -84,6 +94,9 @@
       linkage.on('ping', callback);
       return linkage.emit('ping');
     };
+    linkage.on('disconnect', function() {
+      return clock.abort();
+    });
     return controller;
   };
 

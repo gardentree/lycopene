@@ -15,12 +15,10 @@ class Clock
       state : 'ready'
       remain: -1
   start: (time)=>
-    console.log(time)
     @time = time
     @timer = setInterval(@beat,1000) if !@timer?
   stop: (time)=>
-    clearInterval(@timer)
-    @timer = null
+    @stopTimer()
 
     @time = time
     @draw('ready')
@@ -28,6 +26,9 @@ class Clock
     @time = time
 
     @draw(@time.state)
+  abort: =>
+    @stopTimer()
+    @draw('abort')
   beat: =>
     @time.remain--
 
@@ -37,6 +38,9 @@ class Clock
     minute = ('0' + ((@time.remain - second) / 60)).slice(-2)
 
     @redraw(state,minute,second)
+  stopTimer: =>
+    clearInterval(@timer)
+    @timer = null
 
 window.build = (canvas) ->
   clock = new Clock(canvas)
@@ -52,5 +56,8 @@ window.build = (canvas) ->
     linkage.on('ping',callback)
     linkage.emit('ping')
 
+  linkage.on('disconnect',=>
+    clock.abort()
+  )
   controller
 

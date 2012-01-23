@@ -5,7 +5,6 @@ script(type='text/javascript')
     var current = '';
     controller = build(function(state,minute,second) {
       if (current != state) {
-        console.log(state);
         $('#time').attr('class',state);
         $('#controller').html($('#' + state).html());
         
@@ -14,6 +13,10 @@ script(type='text/javascript')
 
       $('#minute').text(minute);
       $('#second').text(second);
+
+      if (second == 30) {
+        controller.synchronize();
+      }
     })
 
     connecting = $('#connecting')

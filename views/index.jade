@@ -1,5 +1,25 @@
 script(src='/javascripts/clock.js')
 script(type='text/javascript')
+  //
+  function AudioWithLoop(url,times) {
+    var audio = new Audio(url);
+    var times   = times;
+    var lap = 1;
+
+    this.play = function() {
+      lap = 1;
+      audio.play();
+    };
+    audio.addEventListener('ended',function() {
+      if (lap++ < times) {
+        audio.play();
+      }
+    });
+  }
+  //
+  var notify  = new AudioWithLoop("/sounds/notify.wav",3);
+  var ding    = new AudioWithLoop("/sounds/ding.wav",3);
+
   var controller;
   $(document).ready(function() {
     var current = '';
@@ -7,7 +27,13 @@ script(type='text/javascript')
       if (current != state) {
         $('#time').attr('class',state);
         $('#controller').html($('#' + state).html());
-        
+
+        console.log(state);
+        switch (state) {
+        case 'working':notify.play();break;
+        case 'resting':ding.play();break;
+        }
+
         current = state;
       }
 
@@ -28,7 +54,6 @@ script(type='text/javascript')
   });
   document.body.style.zoom=2
 
-  var audio = new Audio("/sounds/button.wav");
 
 div#clock
   div#time
@@ -42,8 +67,8 @@ div#connecting
 
 div(style="display: none;")
   div#ready
-    button#button1.button(onclick='audio.play();controller.start();') Start
+    button#button1.button(onclick='controller.start();') Start
   div#working
-    button#button1.button(onclick='audio.play();controller.stop();') Stop
+    button#button1.button(onclick='controller.stop();') Stop
   div#resting
-    button#button1.button(onclick='audio.play();controller.stop();') Stop
+    button#button1.button(onclick='controller.stop();') Stop

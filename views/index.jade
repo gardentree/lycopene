@@ -20,61 +20,52 @@ script(src='/javascripts/clock.js')
       )
       controller
   )
-script(type='text/javascript')
-  //
-  function AudioWithLoop(url,times) {
-    var audio = new Audio(url);
-    var times   = times;
-    var lap = 1;
 
-    this.play = function() {
-      lap = 1;
-      audio.play();
-    };
-    audio.addEventListener('ended',function() {
-      if (lap++ < times) {
-        audio.play();
-      }
-    });
-  }
-  //
-  var notify  = new AudioWithLoop("/sounds/notify.wav",3);
-  var ding    = new AudioWithLoop("/sounds/ding.wav",3);
+  class AudioWithLoop
+    constructor: (url,times)->
+      audio = new Audio(url)
+      lap = 1
 
-  var controller;
-  $(document).ready(function() {
-    var current = '';
-    controller = build(function(state,minute,second) {
-      if (current != state) {
-        $('#time').attr('class',state);
-        $('#controller').html($('#' + state).html());
+      @play = ->
+        lap = 1
+        audio.play()
 
-        console.log(state);
-        switch (state) {
-        case 'working':notify.play();break;
-        case 'resting':ding.play();break;
-        }
+      audio.addEventListener('ended', ->
+        if (lap++ < times)
+          audio.play()
+      )
+  notify  = new AudioWithLoop("/sounds/notify.wav",3)
+  ding    = new AudioWithLoop("/sounds/ding.wav",3)
+
+  $(document).ready( ->
+    current = '';
+    controller = build((state,minute,second) ->
+      if (current != state)
+        $('#time').attr('class',state)
+        $('#controller').html($('#' + state).html())
+
+        switch state
+          when 'working' then notify.play()
+          when 'resting' then ding.play()
 
         current = state;
-      }
 
-      $('#minute').text(minute);
-      $('#second').text(second);
+      $('#minute').text(minute)
+      $('#second').text(second)
 
-      if (second == 30) {
-        controller.synchronize();
-      }
-    })
+      if (second == 30)
+        controller.synchronize()
+    )
+    window.lycopene.controller = controller
 
     connecting = $('#connecting')
-    connecting.show();
-    controller.ping(function() {
-      controller.synchronize();
-      connecting.hide();
-    })
-  });
+    connecting.show()
+    controller.ping( ->
+      controller.synchronize()
+      connecting.hide()
+    )
+  )
   document.body.style.zoom=2
-
 
 div#clock
   div#time
@@ -88,8 +79,8 @@ div#connecting
 
 div(style="display: none;")
   div#ready
-    button#button1.button(onclick='controller.start();') Start
+    button#button1.button(onclick='lycopene.controller.start();') Start
   div#working
-    button#button1.button(onclick='controller.stop();') Stop
+    button#button1.button(onclick='lycopene.controller.stop();') Stop
   div#resting
-    button#button1.button(onclick='controller.stop();') Stop
+    button#button1.button(onclick='lycopene.controller.stop();') Stop

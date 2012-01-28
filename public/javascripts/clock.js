@@ -22,6 +22,8 @@
 
   })();
 
+  module.exports.Binder = Binder;
+
   Clock = (function() {
 
     function Clock(redraw) {
@@ -80,24 +82,6 @@
 
   })();
 
-  window.build = function(canvas) {
-    var binder, clock, controller, linkage,
-      _this = this;
-    clock = new Clock(canvas);
-    controller = new Object();
-    linkage = io.connect('/');
-    binder = new Binder(linkage, clock, controller);
-    binder.bind('start');
-    binder.bind('stop');
-    binder.bind('synchronize');
-    controller.ping = function(callback) {
-      linkage.on('ping', callback);
-      return linkage.emit('ping');
-    };
-    linkage.on('disconnect', function() {
-      return clock.abort();
-    });
-    return controller;
-  };
+  module.exports.Clock = Clock;
 
 }).call(this);

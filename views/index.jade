@@ -1,4 +1,25 @@
 script(src='/javascripts/clock.js')
+:coffeescript
+  $(document).ready(->
+    window.build = (canvas) ->
+      clock = new lycopene.Clock(canvas)
+      controller = new Object()
+
+      linkage = io.connect('/')
+      binder = new lycopene.Binder(linkage,clock,controller)
+      binder.bind('start')
+      binder.bind('stop')
+      binder.bind('synchronize')
+      
+      controller.ping = (callback)=>
+        linkage.on('ping',callback)
+        linkage.emit('ping')
+
+      linkage.on('disconnect',=>
+        clock.abort()
+      )
+      controller
+  )
 script(type='text/javascript')
   //
   function AudioWithLoop(url,times) {

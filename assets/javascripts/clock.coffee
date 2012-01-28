@@ -7,6 +7,7 @@ class Binder
     @controller[command] = =>
       @linkage.emit(command)
     @linkage.on(command,@clock[command])
+module.exports.Binder = Binder
 
 class Clock
   constructor: (redraw) ->
@@ -41,23 +42,4 @@ class Clock
   stopTimer: =>
     clearInterval(@timer)
     @timer = null
-
-window.build = (canvas) ->
-  clock = new Clock(canvas)
-  controller = new Object()
-
-  linkage = io.connect('/')
-  binder = new Binder(linkage,clock,controller)
-  binder.bind('start')
-  binder.bind('stop')
-  binder.bind('synchronize')
-  
-  controller.ping = (callback)=>
-    linkage.on('ping',callback)
-    linkage.emit('ping')
-
-  linkage.on('disconnect',=>
-    clock.abort()
-  )
-  controller
-
+module.exports.Clock = Clock

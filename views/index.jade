@@ -1,4 +1,5 @@
 script(src='/javascripts/clock.js')
+script(src='/javascripts/audio.js')
 :coffeescript
   $(document).ready(->
     window.build = (canvas) ->
@@ -21,21 +22,8 @@ script(src='/javascripts/clock.js')
       controller
   )
 
-  class AudioWithLoop
-    constructor: (url,times)->
-      audio = new Audio(url)
-      lap = 1
-
-      @play = ->
-        lap = 1
-        audio.play()
-
-      audio.addEventListener('ended', ->
-        if (lap++ < times)
-          audio.play()
-      )
-  notify  = new AudioWithLoop("/sounds/notify.wav",3)
-  ding    = new AudioWithLoop("/sounds/ding.wav",3)
+  notify  = new lycopene.AudioWithLoop(new Audio("/sounds/notify.wav"),3)
+  ding    = new lycopene.AudioWithLoop(new Audio("/sounds/ding.wav"),3)
 
   $(document).ready( ->
     current = '';

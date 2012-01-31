@@ -1,47 +1,15 @@
 script(src='/javascripts/clock.js')
 script(src='/javascripts/clock_controller.js')
 script(src='/javascripts/audio.js')
+script(src='/javascripts/index.js')
 :coffeescript
-  $(document).ready(->
-    window.build = (canvas) ->
-      clock = new lycopene.Clock(canvas)
-      linkage = io.connect('/')
-
-      new lycopene.ClockController(linkage,clock)
-  )
-
-  notify  = new lycopene.AudioWithLoop(new Audio("/sounds/notify.wav"),3)
-  ding    = new lycopene.AudioWithLoop(new Audio("/sounds/ding.wav"),3)
-
   $(document).ready( ->
-    current = '';
-    controller = build((state,minute,second) ->
-      if (current != state)
-        $('#time').attr('class',state)
-        $('#controller').html($('#' + state).html())
+    lycopene.Audio = Audio
+    lycopene.io    = io
 
-        switch state
-          when 'working' then notify.play()
-          when 'resting' then ding.play()
-
-        current = state;
-
-      $('#minute').text(minute)
-      $('#second').text(second)
-
-      if (second == 30)
-        controller.synchronize()
-    )
-    window.lycopene.controller = controller
-
-    connecting = $('#connecting')
-    connecting.show()
-    controller.ping( ->
-      controller.synchronize()
-      connecting.hide()
-    )
+    window.controller = lycopene.build(lycopene,$)
+    document.body.style.zoom=2
   )
-  document.body.style.zoom=2
 
 div#clock
   div#time
@@ -55,8 +23,8 @@ div#connecting
 
 div(style="display: none;")
   div#ready
-    button#button1.button(onclick='lycopene.controller.start();') Start
+    button#button1.button(onclick='controller.start();') Start
   div#working
-    button#button1.button(onclick='lycopene.controller.stop();') Stop
+    button#button1.button(onclick='controller.stop();') Stop
   div#resting
-    button#button1.button(onclick='lycopene.controller.stop();') Stop
+    button#button1.button(onclick='controller.stop();') Stop

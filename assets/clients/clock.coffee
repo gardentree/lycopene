@@ -1,14 +1,3 @@
-class Binder
-  constructor: (linkage,clock,controller) ->
-    @linkage    = linkage
-    @clock      = clock
-    @controller = controller
-  bind: (command) =>
-    @controller[command] = =>
-      @linkage.emit(command)
-    @linkage.on(command,@clock[command])
-module.exports.Binder = Binder
-
 class Clock
   constructor: (redraw) ->
     @redraw  = redraw

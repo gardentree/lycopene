@@ -1,28 +1,6 @@
 (function() {
-  var Binder, Clock,
+  var Clock,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-  Binder = (function() {
-
-    function Binder(linkage, clock, controller) {
-      this.bind = __bind(this.bind, this);      this.linkage = linkage;
-      this.clock = clock;
-      this.controller = controller;
-    }
-
-    Binder.prototype.bind = function(command) {
-      var _this = this;
-      this.controller[command] = function() {
-        return _this.linkage.emit(command);
-      };
-      return this.linkage.on(command, this.clock[command]);
-    };
-
-    return Binder;
-
-  })();
-
-  module.exports.Binder = Binder;
 
   Clock = (function() {
 

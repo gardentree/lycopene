@@ -3,6 +3,23 @@ assert = require('assert')
 helper = require('../test_helper')
 build = helper.require(__filename).build
 
+createLinkage = ->
+  class Linkage
+    constructor:()->
+      @pair      = null
+      @callbacks = {}
+    on  :(command,callback)=>
+      @callbacks[command] = callback
+    emit:(command,value)=>
+      @pair.callbacks[command](value)
+
+  client = new Linkage()
+  server = new Linkage()
+  client.pair = server
+  server.pair = client
+
+  {client:client,server:server}
+
 vows
   .describe('index')
   .addBatch
@@ -14,15 +31,17 @@ vows
         document = jsdom("<html><body><div id='connecting'></div></body></html>")
         window   = document.createWindow()
         jsdom.jQueryify(window,->
+          pomodoro = new (helper.require("servers/pomodoro").Pomodoro)({working:5,resting:5})
+
+          linkage = createLinkage()
+          pomodoro.login(linkage.server)
+
           lycopene =
             AudioWithLoop  :helper.require("clients/audio").AudioWithLoop
             Audio          :->{addEventListener:->}
             Clock          :helper.require("clients/clock").Clock
             ClockController:helper.require("clients/clock_controller").ClockController
-            io             :{connect:->{
-              on:->
-              emit:->
-            }}
+            io             :{connect:->linkage.client}
           try
             controller = build(lycopene,window.jQuery)
             promise.emit('success',window.jQuery)
@@ -32,5 +51,5 @@ vows
 
         promise
       'controller': ($)->
-        assert.equal($('#connecting').attr('style'),'')
+        assert.equal($('#connecting').css('display'),'none')
   .export module

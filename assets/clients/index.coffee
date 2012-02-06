@@ -1,7 +1,8 @@
 module.exports.build = (lycopene,$)->
+  sound = new lycopene.Audio("/sounds/notify.wav")
   controller = do ->
-    notify  = new lycopene.AudioWithLoop(new lycopene.Audio("/sounds/notify.wav"),3)
-    ding    = new lycopene.AudioWithLoop(new lycopene.Audio("/sounds/ding.wav"),3)
+    startWork = new lycopene.AudioWithLoop(sound,3)
+    startRest = new lycopene.AudioWithLoop(sound,2)
     current = ''
 
     clock = new lycopene.Clock((state,minute,second) ->
@@ -10,8 +11,8 @@ module.exports.build = (lycopene,$)->
         $('#controller').html($('#' + state).html())
 
         switch state
-          when 'working' then notify.play()
-          when 'resting' then ding.play()
+          when 'working' then startWork.play()
+          when 'resting' then startRest.play()
 
         current = state
 
@@ -24,6 +25,8 @@ module.exports.build = (lycopene,$)->
     linkage = lycopene.io.connect('/')
 
     new lycopene.ClockController(linkage,clock)
+  controller.prepare = ->
+    sound.load()
 
   do ->
     connecting = $('#connecting')

@@ -23,7 +23,7 @@ div#connecting
 
 div(style="display: none;")
   div#ready
-    button#button1.button(onclick='controller.start();') Start
+    button#button1.button(onclick='controller.prepare();controller.start();') Start
   div#working
     button#button1.button(onclick='controller.stop();') Stop
   div#resting

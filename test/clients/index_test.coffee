@@ -11,6 +11,9 @@ createLinkage = ->
     on  :(command,callback)=>
       @callbacks[command] = callback
     emit:(command,value)=>
+      unless @pair.callbacks[command]
+        throw "#{command} is not defined"
+
       @pair.callbacks[command](value)
 
   client = new Linkage()
@@ -72,7 +75,21 @@ vows
   .describe('index')
   .addBatch
     'initialize':
-      topic: -> kick(draft)
-      'connecting is hidden': ($)-> assert.equal($('#connecting').css('display'),'none')
-      'time is ready'       : ($)-> assert.equal($('#time').attr('class')       ,'ready')
+      topic: ->
+        kick(draft)
+      'connecting is hidden': ($)->
+        assert.equal($('#connecting').css('display'),'none')
+      'time is ready': ($)->
+        assert.equal($('#time').attr('class'),'ready')
+      'controller is ready': ($)->
+        assert.equal($('#controller').html(),'ready')
+    'start':
+      topic: ->
+        kick(draft,(controller)->
+          controller.start()
+        )
+      'time is working': ($)->
+        assert.equal($('#time').attr('class'),'working')
+      'controller is ready': ($)->
+        assert.equal($('#controller').html(),'working')
   .export module

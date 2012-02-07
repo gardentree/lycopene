@@ -16,6 +16,7 @@ class Playing
 
 class Ready
   constructor: (working)->
+    @state   = 'ready'
     @command = 'stop'
     @working = working
   remain: =>

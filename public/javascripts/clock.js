@@ -20,6 +20,7 @@
 
     Clock.prototype.start = function(time) {
       this.time = time;
+      this.draw(this.time.state);
       if (!(this.timer != null)) return this.timer = setInterval(this.beat, 1000);
     };
 

@@ -6,6 +6,8 @@ class Clock
       remain: -1
   start: (time)=>
     @time = time
+
+    @draw(@time.state)
     @timer = setInterval(@beat,1000) if !@timer?
   stop: (time)=>
     @stopTimer()

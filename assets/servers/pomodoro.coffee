@@ -48,14 +48,12 @@ class Pomodoro
   login: (client)=>
     @users[client.id] = client
 
-    client.on('start',(data) =>
-      @status = @status.start()
-      @broadcast('start',{state: @status.state,remain: @status.remain()})
-    )
-    client.on('stop',(data) =>
-      @status = @status.stop()
-      @broadcast('stop',{state: @status.state,remain: @status.remain()})
-    )
+    for command in ['start','stop']
+      do (command)=>
+        client.on(command,(data) =>
+          @status = @status[command]()
+          @broadcast(command,{state: @status.state,remain: @status.remain()})
+        )
     client.on('synchronize', =>
       client.emit(@status.command,{state: @status.state,remain: @status.remain()})
     )

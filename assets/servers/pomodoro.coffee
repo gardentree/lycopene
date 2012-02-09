@@ -5,17 +5,17 @@ scene = require('./scene')
 class Pomodoro
   constructor: (config)->
     @users  = {}
-    @status = new scene.Ready(config.working)
+    @status = new scene.Ready('ready',config.working)
     @config = config
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
   login: (client)=>
     @users[client.id] = client
 
-    for command in ['start','stop']
+    for command in ['start','stop','pause']
       do (command)=>
         client.on(command,(data) =>
-          @status = @status[command]()
+          @status = @status[command](@config.working)
           @broadcast(command,{state: @status.state,remain: @status.remain()})
         )
     client.on('synchronize', =>

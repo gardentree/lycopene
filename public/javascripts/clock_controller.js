@@ -30,6 +30,7 @@
       binder = new Binder(linkage, clock, this);
       binder.bind('start');
       binder.bind('stop');
+      binder.bind('pause');
       binder.bind('synchronize');
       this.ping = function(callback) {
         linkage.on('ping', callback);

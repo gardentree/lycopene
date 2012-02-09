@@ -12,10 +12,12 @@ class Client
     @callbacks[command] = callback
   emit: (command,value)=>
 
+WORKING = 1500
+RESTING =  300
 make = ->
   client = new Client()
   sinon.spy(client,'emit')
-  pomodoro = new Pomodoro({working:5,resting:5}).login(client)
+  pomodoro = new Pomodoro({working:WORKING,resting:RESTING}).login(client)
 
   {pomodoro:pomodoro,client:client}
 
@@ -25,14 +27,14 @@ vows
     'initialize':
       topic: ->
         client = new Client()
-        new Pomodoro({working:5,resting:5}).login(client)
+        new Pomodoro({working:WORKING,resting:RESTING}).login(client)
 
         client
       'commands': (topic)->
-        assert.deepEqual(command for command,callback of topic.callbacks,['start','stop','synchronize','ping','disconnect'])
+        assert.deepEqual(command for command,callback of topic.callbacks,['start','stop','pause','synchronize','ping','disconnect'])
     'login':
       topic: ->
-        pomodoro = new Pomodoro({working:5,resting:5})
+        pomodoro = new Pomodoro({working:WORKING,resting:RESTING})
         pomodoro.login(new Client('1'))
         pomodoro.login(new Client('2'))
 
@@ -43,21 +45,21 @@ vows
       topic: ->
         x = make()
         client = x.client
-        client.callbacks['start']()
+        client.callbacks['start'](WORKING)
 
         x
       'verify': (x)->
-        assert.deepEqual(['start',{state:'working',remain:5}],x.client.emit.getCall(0).args)
+        assert.deepEqual(['start',{state:'working',remain:WORKING}],x.client.emit.getCall(0).args)
         assert.equal(1,x.client.emit.callCount)
     'start -> stop':
       topic: ->
         x = make()
         client = x.client
-        client.callbacks['start']()
-        client.callbacks['stop']()
+        client.callbacks['start'](WORKING)
+        client.callbacks['stop'](WORKING)
 
         x
       'verify': (x)->
-        assert.deepEqual(['stop' ,{state:'ready'  ,remain:5}],x.client.emit.getCall(1).args)
+        assert.deepEqual(['stop' ,{state:'ready'  ,remain:WORKING}],x.client.emit.getCall(1).args)
         assert.equal(2,x.client.emit.callCount)
   .export module

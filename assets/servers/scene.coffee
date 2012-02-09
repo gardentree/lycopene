@@ -9,22 +9,27 @@ class Playing
     @starting = getNow()
   remain: =>
     @time - (getNow() - @starting)
-  start: =>
+  start: (initial)=>
     this
-  stop: =>
-    new Ready(@time)
+  stop: (initial)=>
+    new Ready('ready',initial)
+  pause: (initial)=>
+    new Ready('pausing',@remain())
+
 module.exports.Playing = Playing
 
 class Ready
-  constructor: (working)->
-    @state   = 'ready'
+  constructor: (state,working)->
+    @state   = state
     @command = 'stop'
     @working = working
   remain: =>
     @working
-  start: =>
+  start: (initial)=>
     new Playing('working',@working)
-  stop: =>
+  stop: (initial)=>
+    this
+  pause: (initial)=>
     this
 module.exports.Ready = Ready
 

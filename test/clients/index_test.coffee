@@ -69,6 +69,7 @@ draft = """
     <div id="ready">ready</div>
     <div id="working">working</div>
     <div id="resting">resting</div>
+    <div id="pausing">pausing</div>
   </div>
 """
 
@@ -93,4 +94,14 @@ vows
         assert.equal($('#time').attr('class'),'working')
       'controller is ready': ($)->
         assert.equal($('#controller').html(),'working')
+    'pause':
+      topic: ->
+        kick(draft,(controller)->
+          controller.start()
+          controller.pause()
+        )
+      'time is working': ($)->
+        assert.equal($('#time').attr('class'),'pausing')
+      'controller is ready': ($)->
+        assert.equal($('#controller').html(),'pausing')
   .export module

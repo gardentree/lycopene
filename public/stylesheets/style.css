@@ -23,10 +23,13 @@ a {
   background-color: #228b22;
 }
 .ready {
+  background-color: #f00;
+}
+.pausing {
   background-color: #ffd700;
 }
 .abort {
-  background-color: #f00;
+  background-color: #000;
 }
 .number {
   background-color: #ccc;

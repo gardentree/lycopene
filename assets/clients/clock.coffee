@@ -13,7 +13,9 @@ class Clock
     @stopTimer()
 
     @time = time
-    @draw('ready')
+    @draw(@time.state)
+  pause: (time)=>
+    @stop(time)
   synchronize: (time)=>
     @time = time
 

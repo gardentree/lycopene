@@ -16,6 +16,7 @@ vows
       'command': (topic) ->
         assert.isFunction(topic.start)
         assert.isFunction(topic.stop)
+        assert.isFunction(topic.pause)
         assert.isFunction(topic.synchronize)
 
   .export module

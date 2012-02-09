@@ -25,6 +25,9 @@ div(style="display: none;")
   div#ready
     button#button1.button(onclick='controller.prepare();controller.start();') Start
   div#working
-    button#button1.button(onclick='controller.stop();') Stop
+    button#button2left.button(onclick='controller.pause();') Pause
+    button#button2right.button(onclick='controller.stop();') Stop
   div#resting
     button#button1.button(onclick='controller.stop();') Stop
+  div#pausing
+    button#button1.button(onclick='controller.start();') Start

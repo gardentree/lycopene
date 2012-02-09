@@ -10,6 +10,7 @@
       this.beat = __bind(this.beat, this);
       this.abort = __bind(this.abort, this);
       this.synchronize = __bind(this.synchronize, this);
+      this.pause = __bind(this.pause, this);
       this.stop = __bind(this.stop, this);
       this.start = __bind(this.start, this);      this.redraw = redraw;
       this.time = {
@@ -27,7 +28,11 @@
     Clock.prototype.stop = function(time) {
       this.stopTimer();
       this.time = time;
-      return this.draw('ready');
+      return this.draw(this.time.state);
+    };
+
+    Clock.prototype.pause = function(time) {
+      return this.stop(time);
     };
 
     Clock.prototype.synchronize = function(time) {

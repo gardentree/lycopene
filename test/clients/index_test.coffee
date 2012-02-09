@@ -5,19 +5,20 @@ build = helper.require(__filename).build
 
 createLinkage = ->
   class Linkage
-    constructor:()->
+    constructor:(name)->
+      @name      = name
       @pair      = null
       @callbacks = {}
     on  :(command,callback)=>
       @callbacks[command] = callback
     emit:(command,value)=>
       unless @pair.callbacks[command]
-        throw "#{command} is not defined"
+        throw "#{@name}:#{command} is not defined"
 
       @pair.callbacks[command](value)
 
-  client = new Linkage()
-  server = new Linkage()
+  client = new Linkage('client')
+  server = new Linkage('server')
   client.pair = server
   server.pair = client
 

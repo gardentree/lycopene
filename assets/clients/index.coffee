@@ -17,6 +17,9 @@ module.exports.build = (lycopene,$)->
           when 'working' then startWork.play()
           when 'resting' then startRest.play()
 
+        $('#today').html(scene.today)
+        $('#overall').html(scene.overall)
+
         current = scene.state
 
       $('#minute').text(minute)

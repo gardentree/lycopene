@@ -16,7 +16,16 @@ div#clock
     span#minute.number 00
     span#second.number 00
 
-  div#controller
+  div#display
+    div#controller
+    div#turn  
+      table.turn
+        tr
+          td.label Pomodoros today
+          td#today.count 0
+        tr
+          td.label Pomodoros overall
+          td#overall.count 0
 
 div#connecting 
   div Now Connecting...

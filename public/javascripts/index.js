@@ -22,6 +22,8 @@
             case 'resting':
               startRest.play();
           }
+          $('#today').html(scene.today);
+          $('#overall').html(scene.overall);
           current = scene.state;
         }
         $('#minute').text(minute);

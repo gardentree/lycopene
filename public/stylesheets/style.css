@@ -39,10 +39,27 @@ a {
   font-size: 72pt;
   margin: 0px 8px 0px 8px;
 }
-#controller {
+#display {
   padding: 16px 16px 16px 16px;
   background-color: #dcdcdc;
   border: 1px solid;
+}
+#turn {
+  padding: 10px 0px 0px 0px;
+}
+.turn {
+  margin: auto;
+  width: 240px;
+}
+.label {
+  font-size: 14pt;
+  text-align: left;
+}
+.count {
+  color: #fff;
+  background-color: #696969;
+  width: 36px;
+  border-radius: 8px;
 }
 .button {
   font-size: 24pt;

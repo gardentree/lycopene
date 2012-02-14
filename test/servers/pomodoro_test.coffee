@@ -17,7 +17,9 @@ RESTING =  300
 make = ->
   client = new Client()
   sinon.spy(client,'emit')
-  pomodoro = new Pomodoro({working:WORKING,resting:RESTING}).login(client)
+  
+  pomodoro = new Pomodoro({working:WORKING,resting:RESTING})
+  pomodoro.login(client)
 
   {pomodoro:pomodoro,client:client}
 
@@ -49,7 +51,7 @@ vows
 
         x
       'verify': (x)->
-        assert.deepEqual(x.client.emit.getCall(0).args,['start',{state:'working',remain:WORKING}])
+        assert.deepEqual(x.client.emit.getCall(0).args,['start',{state:'working',remain:WORKING,today:0,overall:0}])
         assert.equal(x.client.emit.callCount,1)
     'start -> stop':
       topic: ->
@@ -60,6 +62,24 @@ vows
 
         x
       'verify': (x)->
-        assert.deepEqual(x.client.emit.getCall(1).args,['stop' ,{state:'ready'  ,remain:WORKING}])
+        assert.deepEqual(x.client.emit.getCall(1).args,['stop' ,{state:'ready',remain:WORKING,today:0,overall:0}])
         assert.equal(x.client.emit.callCount,2)
+    'turn':
+      topic: ->
+        @fake = sinon.useFakeTimers(0)
+
+        x = make()
+        client = x.client
+        client.callbacks['start'](WORKING)
+
+        @fake.tick(WORKING * 1000)
+        x.pomodoro.beat()
+
+        x
+      'verify': (x)->
+        assert.equal(x.client.emit.callCount,2)
+        assert.deepEqual(x.client.emit.getCall(0).args,['start',{state:'working',remain:WORKING,today:0,overall:0}])
+        assert.deepEqual(x.client.emit.getCall(1).args,['start',{state:'resting',remain:RESTING,today:1,overall:1}])
+      teardown: ->
+        @fake.restore()
   .export module

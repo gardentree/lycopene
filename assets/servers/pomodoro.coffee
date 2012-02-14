@@ -7,12 +7,15 @@ class Pomodoro
     @users  = {}
     @status = new scene.Ready('ready',config.working)
     @config = config
+    @today  = 0
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
   scene: =>
     a =
-      state :@status.state
-      remain:@status.remain()
+      state  :@status.state
+      remain :@status.remain()
+      today  :@today
+      overall:@today
   login: (client)=>
     @users[client.id] = client
 
@@ -37,6 +40,7 @@ class Pomodoro
       switch @status.state
         when 'working'
           @status = new scene.Playing('resting',@config.resting)
+          @today++
         when 'resting'
           @status = new scene.Playing('working',@config.working)
       @broadcast('start',@scene())

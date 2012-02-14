@@ -63,8 +63,16 @@ draft = """
       <span id="second"></span>
     </div>
     <div id="controller"></div>
+    <div id="turn">
+      <div id="today"></div>
+      <div id="overall"></div>
+    </div>
   </div>
   <div id='connecting'></div>
+  <div id='turn'>
+    <div id='today'></div>
+    <div id='overall'></div>
+  </div>
   <div>
     <div id="ready">ready</div>
     <div id="working">working</div>
@@ -94,6 +102,10 @@ vows
         assert.equal($('#time').attr('class'),'working')
       'controller is ready': ($)->
         assert.equal($('#controller').html(),'working')
+      'today is 0': ($)->
+        assert.equal($('#today').html(),'0')
+      'overall is 0': ($)->
+        assert.equal($('#overall').html(),'0')
     'pause':
       topic: ->
         kick(draft,(controller)->

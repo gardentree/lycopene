@@ -9,6 +9,10 @@ class Pomodoro
     @config = config
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
+  scene: =>
+    a =
+      state :@status.state
+      remain:@status.remain()
   login: (client)=>
     @users[client.id] = client
 
@@ -16,10 +20,10 @@ class Pomodoro
       do (command)=>
         client.on(command,(data) =>
           @status = @status[command](@config.working)
-          @broadcast(command,{state: @status.state,remain: @status.remain()})
+          @broadcast(command,@scene())
         )
     client.on('synchronize', =>
-      client.emit(@status.command,{state: @status.state,remain: @status.remain()})
+      client.emit(@status.command,@scene())
     )
     client.on('ping',=>
       client.emit('ping')
@@ -35,6 +39,6 @@ class Pomodoro
           @status = new scene.Playing('resting',@config.resting)
         when 'resting'
           @status = new scene.Playing('working',@config.working)
-      @broadcast('start',{state: @status.state,remain: @status.remain()})
+      @broadcast('start',@scene())
 
 module.exports.Pomodoro = Pomodoro

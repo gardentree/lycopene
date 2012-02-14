@@ -70,10 +70,6 @@ draft = """
     </div>
   </div>
   <div id='connecting'></div>
-  <div id='turn'>
-    <div id='today'></div>
-    <div id='overall'></div>
-  </div>
   <div>
     <div id="ready">ready</div>
     <div id="working">working</div>

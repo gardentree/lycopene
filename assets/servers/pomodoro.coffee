@@ -11,11 +11,10 @@ class Pomodoro
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
   scene: =>
-    a =
-      state  :@status.state
-      remain :@status.remain()
-      today  :@today
-      overall:@today
+    state  :@status.state
+    remain :@status.remain()
+    today  :@today
+    overall:@today
   login: (client)=>
     @users[client.id] = client
 

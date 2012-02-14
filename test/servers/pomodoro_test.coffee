@@ -49,8 +49,8 @@ vows
 
         x
       'verify': (x)->
-        assert.deepEqual(['start',{state:'working',remain:WORKING}],x.client.emit.getCall(0).args)
-        assert.equal(1,x.client.emit.callCount)
+        assert.deepEqual(x.client.emit.getCall(0).args,['start',{state:'working',remain:WORKING}])
+        assert.equal(x.client.emit.callCount,1)
     'start -> stop':
       topic: ->
         x = make()
@@ -60,6 +60,6 @@ vows
 
         x
       'verify': (x)->
-        assert.deepEqual(['stop' ,{state:'ready'  ,remain:WORKING}],x.client.emit.getCall(1).args)
-        assert.equal(2,x.client.emit.callCount)
+        assert.deepEqual(x.client.emit.getCall(1).args,['stop' ,{state:'ready'  ,remain:WORKING}])
+        assert.equal(x.client.emit.callCount,2)
   .export module

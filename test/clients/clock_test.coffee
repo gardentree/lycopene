@@ -14,12 +14,12 @@ vows
         new Clock(->
         )
       'time': (topic) ->
-        assert.deepEqual {state: 'ready',remain: -1},topic.time
+        assert.deepEqual {state:'ready',remain:-1},topic.time
     'start':
       topic: ->
         redraw = sinon.spy()
-        @fake = sinon.useFakeTimers(0,'setInterval')
-        @clock = new Clock(redraw).start({state: 'working',remain: 1000})
+        @fake = sinon.useFakeTimers(0)
+        new Clock(redraw).start({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
         assert.equal     redraw.callCount      ,1
@@ -36,8 +36,8 @@ vows
     'stop':
       topic: ->
         redraw = sinon.spy()
-        @fake = sinon.useFakeTimers(0,'setInterval')
-        @clock = new Clock(redraw).stop({state: 'working',remain: 1000})
+        @fake = sinon.useFakeTimers(0)
+        new Clock(redraw).stop({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
         assert.equal     redraw.callCount      ,1
@@ -53,8 +53,8 @@ vows
     'pause':
       topic: ->
         redraw = sinon.spy()
-        @fake = sinon.useFakeTimers(0,'setInterval')
-        @clock = new Clock(redraw).pause({state:'working',remain:1000})
+        @fake = sinon.useFakeTimers(0)
+        new Clock(redraw).pause({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
         assert.equal     redraw.callCount      ,1
@@ -70,8 +70,8 @@ vows
     'synchronize':
       topic: ->
         redraw = sinon.spy()
-        @fake = sinon.useFakeTimers(0,'setInterval')
-        @clock = new Clock(redraw).synchronize({state: 'working',remain: 1000})
+        @fake = sinon.useFakeTimers(0)
+        new Clock(redraw).synchronize({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
         assert.equal     redraw.callCount      ,1

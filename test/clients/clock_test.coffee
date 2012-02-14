@@ -22,15 +22,15 @@ vows
         new Clock(redraw).start({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
-        assert.equal     redraw.callCount      ,1
-        assert.deepEqual redraw.getCall(0).args,['working','16','40']
+        assert.equal     redraw.callCount         ,1
+        assert.deepEqual redraw.getCall(0).args[0],{state:'working',remain:1000}
       'next time':
         topic:(redraw)->
           @fake.tick(1000)
           redraw
         'redraw': (redraw) ->
-          assert.equal     redraw.callCount      ,2
-          assert.deepEqual redraw.getCall(1).args,['working','16','39']
+          assert.equal     redraw.callCount         ,2
+          assert.deepEqual redraw.getCall(1).args[0],{state:'working',remain:999}
       teardown: ->
         @fake.restore()
     'stop':
@@ -40,8 +40,8 @@ vows
         new Clock(redraw).stop({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
-        assert.equal     redraw.callCount      ,1
-        assert.deepEqual redraw.getCall(0).args,['working','16','40']
+        assert.equal     redraw.callCount         ,1
+        assert.deepEqual redraw.getCall(0).args[0],{state:'working',remain:1000}
       'next time':
         topic:(redraw)->
           @fake.tick(1000)
@@ -57,8 +57,8 @@ vows
         new Clock(redraw).pause({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
-        assert.equal     redraw.callCount      ,1
-        assert.deepEqual redraw.getCall(0).args,['working','16','40']
+        assert.equal     redraw.callCount         ,1
+        assert.deepEqual redraw.getCall(0).args[0],{state:'working',remain:1000}
       'next time':
         topic:(redraw)->
           @fake.tick(1000)
@@ -74,8 +74,8 @@ vows
         new Clock(redraw).synchronize({state:'working',remain:1000})
         redraw
       'first time': (redraw) ->
-        assert.equal     redraw.callCount      ,1
-        assert.deepEqual redraw.getCall(0).args,['working','16','40']
+        assert.equal     redraw.callCount         ,1
+        assert.deepEqual redraw.getCall(0).args[0],{state:'working',remain:1000}
       'next time':
         topic:(redraw)->
           @fake.tick(1000)
@@ -84,5 +84,18 @@ vows
           assert.equal redraw.callCount,1
       teardown: ->
         @fake.restore()
+    'abort':
+      topic: ->
+        redraw = sinon.spy()
+        @fake = sinon.useFakeTimers(0)
+        clock = new Clock(redraw)
+        clock.start({state:'working',remain:1000})
+        clock.abort()
+        @fake.tick(1000)
+
+        redraw
+      'first time': (redraw) ->
+        assert.equal     redraw.callCount         ,2
+        assert.deepEqual redraw.getCall(1).args[0],{state:'abort',remain:1000}
 
   .export module

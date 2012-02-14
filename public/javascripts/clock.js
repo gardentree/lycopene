@@ -21,14 +21,14 @@
 
     Clock.prototype.start = function(time) {
       this.time = time;
-      this.draw(this.time.state);
+      this.draw();
       if (!(this.timer != null)) return this.timer = setInterval(this.beat, 1000);
     };
 
     Clock.prototype.stop = function(time) {
       this.stopTimer();
       this.time = time;
-      return this.draw(this.time.state);
+      return this.draw();
     };
 
     Clock.prototype.pause = function(time) {
@@ -37,24 +37,22 @@
 
     Clock.prototype.synchronize = function(time) {
       this.time = time;
-      return this.draw(this.time.state);
+      return this.draw();
     };
 
     Clock.prototype.abort = function() {
       this.stopTimer();
-      return this.draw('abort');
+      this.time.state = 'abort';
+      return this.draw();
     };
 
     Clock.prototype.beat = function() {
       this.time.remain--;
-      return this.draw(this.time.state);
+      return this.draw();
     };
 
-    Clock.prototype.draw = function(state) {
-      var minute, second;
-      second = ('0' + (this.time.remain % 60)).slice(-2);
-      minute = ('0' + ((this.time.remain - second) / 60)).slice(-2);
-      return this.redraw(state, minute, second);
+    Clock.prototype.draw = function() {
+      return this.redraw(this.time);
     };
 
     Clock.prototype.stopTimer = function() {

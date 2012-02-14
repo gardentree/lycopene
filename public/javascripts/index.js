@@ -8,18 +8,21 @@
       startWork = new lycopene.AudioWithLoop(sound, 3);
       startRest = new lycopene.AudioWithLoop(sound, 2);
       current = '';
-      clock = new lycopene.Clock(function(state, minute, second) {
-        if (current !== state) {
-          $('#time').attr('class', state);
-          $('#controller').html($('#' + state).html());
-          switch (state) {
+      clock = new lycopene.Clock(function(scene) {
+        var minute, second;
+        second = ('0' + (scene.remain % 60)).slice(-2);
+        minute = ('0' + ((scene.remain - (scene.remain % 60)) / 60)).slice(-2);
+        if (current !== scene.state) {
+          $('#time').attr('class', scene.state);
+          $('#controller').html($('#' + scene.state).html());
+          switch (scene.state) {
             case 'working':
               startWork.play();
               break;
             case 'resting':
               startRest.play();
           }
-          current = state;
+          current = scene.state;
         }
         $('#minute').text(minute);
         $('#second').text(second);

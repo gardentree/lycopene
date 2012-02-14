@@ -7,31 +7,30 @@ class Clock
   start: (time)=>
     @time = time
 
-    @draw(@time.state)
+    @draw()
     @timer = setInterval(@beat,1000) if !@timer?
   stop: (time)=>
     @stopTimer()
 
     @time = time
-    @draw(@time.state)
+    @draw()
   pause: (time)=>
     @stop(time)
   synchronize: (time)=>
     @time = time
 
-    @draw(@time.state)
+    @draw()
   abort: =>
     @stopTimer()
-    @draw('abort')
+
+    @time.state = 'abort'
+    @draw()
   beat: =>
     @time.remain--
 
-    @draw(@time.state)
-  draw: (state)=>
-    second = ('0' + (@time.remain % 60)).slice(-2)
-    minute = ('0' + ((@time.remain - second) / 60)).slice(-2)
-
-    @redraw(state,minute,second)
+    @draw()
+  draw: =>
+    @redraw(@time)
   stopTimer: =>
     clearInterval(@timer)
     @timer = null

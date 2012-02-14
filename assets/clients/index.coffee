@@ -5,16 +5,19 @@ module.exports.build = (lycopene,$)->
     startRest = new lycopene.AudioWithLoop(sound,2)
     current = ''
 
-    clock = new lycopene.Clock((state,minute,second) ->
-      if (current != state)
-        $('#time').attr('class',state)
-        $('#controller').html($('#' + state).html())
+    clock = new lycopene.Clock((scene) ->
+      second = ('0' + (scene.remain % 60)).slice(-2)
+      minute = ('0' + ((scene.remain - (scene.remain % 60)) / 60)).slice(-2)
 
-        switch state
+      if (current != scene.state)
+        $('#time').attr('class',scene.state)
+        $('#controller').html($('#' + scene.state).html())
+
+        switch scene.state
           when 'working' then startWork.play()
           when 'resting' then startRest.play()
 
-        current = state
+        current = scene.state
 
       $('#minute').text(minute)
       $('#second').text(second)

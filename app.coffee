@@ -31,7 +31,6 @@ app.configure('production', ->
 
 # Routes
 
-app.get('/', routes.index)
 
 port = process.env.PORT || 3000
 app.listen(port, ->
@@ -42,9 +41,24 @@ app.listen(port, ->
 config = require("./config/environments/#{process.env.NODE_ENV||'development'}")
 
 #---------
-pomodoro = new (require('./assets/servers/pomodoro').Pomodoro)(config)
-
 socket = io.listen(app)
-socket.sockets.on('connection',pomodoro.login)
 
-setInterval(pomodoro.beat,1000)
+rooms = {}
+app.get('/',(request, response) ->
+  response.render('welcome',{title:'lycopene'})
+)
+app.get('/rooms/:name',(request, response) ->
+  name = request.params.name
+  unless rooms[name]
+    pomodoro = new (require('./assets/servers/pomodoro').Pomodoro)(config)
+
+    socket.of(request.originalUrl).on('connection',pomodoro.login)
+
+    rooms[name] = pomodoro
+
+  response.render('room',{title:name})
+)
+
+setInterval(->
+  pomodoro.beat() for name,pomodoro of rooms
+,1000)

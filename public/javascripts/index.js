@@ -2,7 +2,7 @@
 
   module.exports.build = function(lycopene, $) {
     var controller, sound;
-    sound = new lycopene.Audio("/sounds/notify.wav");
+    sound = new lycopene.host.Audio("/sounds/notify.wav");
     controller = (function() {
       var clock, current, linkage, startRest, startWork;
       startWork = new lycopene.AudioWithLoop(sound, 3);
@@ -30,7 +30,7 @@
         $('#second').text(second);
         if (second === 30) return controller.synchronize();
       });
-      linkage = lycopene.io.connect('/');
+      linkage = lycopene.io.connect(lycopene.host.location.pathname);
       return new lycopene.ClockController(linkage, clock);
     })();
     controller.prepare = function() {

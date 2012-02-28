@@ -40,9 +40,10 @@ kick = (body,setup)->
     linkage = createLinkage()
     pomodoro.login(linkage.server)
 
+    window.Audio = Audio
     lycopene =
       AudioWithLoop  :helper.require("clients/audio").AudioWithLoop
-      Audio          :Audio
+      host           :window
       Clock          :helper.require("clients/clock").Clock
       ClockController:helper.require("clients/clock_controller").ClockController
       io             :{connect:->linkage.client}

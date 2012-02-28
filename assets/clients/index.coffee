@@ -1,5 +1,5 @@
 module.exports.build = (lycopene,$)->
-  sound = new lycopene.Audio("/sounds/notify.wav")
+  sound = new lycopene.host.Audio("/sounds/notify.wav")
   controller = do ->
     startWork = new lycopene.AudioWithLoop(sound,3)
     startRest = new lycopene.AudioWithLoop(sound,2)
@@ -28,7 +28,7 @@ module.exports.build = (lycopene,$)->
       if (second == 30)
         controller.synchronize()
     )
-    linkage = lycopene.io.connect('/')
+    linkage = lycopene.io.connect(lycopene.host.location.pathname)
 
     new lycopene.ClockController(linkage,clock)
   controller.prepare = ->

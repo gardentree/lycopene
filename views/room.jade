@@ -4,8 +4,8 @@ script(src='/javascripts/audio.js')
 script(src='/javascripts/index.js')
 :coffeescript
   $(document).ready( ->
-    lycopene.Audio = Audio
-    lycopene.io    = io
+    lycopene.host = window
+    lycopene.io   = io
 
     window.controller = lycopene.build(lycopene,$)
     document.body.style.zoom=2

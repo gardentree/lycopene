@@ -7,6 +7,20 @@ body {
 a {
   color: #00b7ff;
 }
+#welcome {
+  margin: 0 auto;
+}
+#welcome #enter {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+#welcome #enter #name {
+  width: 50%;
+  top: 50%;
+  font-size: 24pt;
+  position: relative;
+}
 #clock {
   margin: 0 auto;
   width: 320px;

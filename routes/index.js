@@ -1,8 +1,3 @@
-
-/*
- * GET home page.
- */
-
-exports.index = function(req, res){
-  res.render('index', { title: 'lycopene' })
+exports.index = function(request, response){
+  response.render('index',{title:'lycopene'})
 };

@@ -3,14 +3,14 @@
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-      "express": "2.5.2"
+      "express"      : "2.5.2"
     , "coffee-script": ">=0.0.1"
-    , "socket.io": ">=0.0.1"
-    , "jade": ">= 0.0.1"
-    , "stylus": ">= 0.0.1"
-    , "mongoose": ">=0.0.1"
-    , "vows": ">=0.0.1"
-    , "sinon": ">=0.0.1"
-    , "jsdom": ">=0.0.1"
+    , "socket.io"    : ">=0.0.1"
+    , "jade"         : ">=0.0.1"
+    , "stylus"       : ">=0.0.1"
+    , "mongoose"     : ">=0.0.1"
+    , "vows"         : ">=0.0.1"
+    , "sinon"        : ">=0.0.1"
+    , "jsdom"        : ">=0.0.1"
   }
 }

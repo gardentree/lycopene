@@ -1,6 +1,4 @@
-
 # Module dependencies.
-
 express = require('express')
 routes = require('./routes')
 io = require('socket.io')
@@ -8,7 +6,6 @@ io = require('socket.io')
 app = module.exports = express.createServer()
 
 # Configuration
-
 app.configure( ->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'jade')
@@ -29,9 +26,6 @@ app.configure('production', ->
   app.use(express.errorHandler())
 )
 
-# Routes
-
-
 port = process.env.PORT || 3000
 app.listen(port, ->
   console.log("Listening on " + port)
@@ -43,6 +37,7 @@ config = require("./config/environments/#{process.env.NODE_ENV||'development'}")
 #---------
 socket = io.listen(app)
 
+# Routes
 rooms = {}
 app.get('/',(request, response) ->
   response.render('welcome',{title:'lycopene'})

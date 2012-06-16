@@ -1,20 +1,25 @@
 getNow = ->
   Math.floor(new Date().getTime() / 1000)
+isEmpty = (object)->
+  return false for key,value of object
+  return true
 
 scene = require('./scene')
 class Pomodoro
-  constructor: (config)->
+  constructor: (model,config)->
+    @model  = model
     @users  = {}
     @status = new scene.Ready('ready',config.working)
     @config = config
     @today  = 0
+    @timer  = null 
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
   scene: =>
     state  :@status.state
     remain :@status.remain()
     today  :@today
-    overall:@today
+    overall:@model.overall
   login: (client)=>
     @users[client.id] = client
 
@@ -33,13 +38,25 @@ class Pomodoro
     client.on('disconnect', =>
       console.log("disconnect #{client}")
       delete @users[client.id]
+
+      if isEmpty(@users)
+        clearInterval(@timer)
+        @timer = null
+        console.log "stop beat of " + @model.name
     )
+
+    @timer = setInterval(@beat,1000) unless @timer
   beat: =>
     if @status.remain() <= 0
       switch @status.state
         when 'working'
           @status = new scene.Playing('resting',@config.resting)
           @today++
+
+          @model.overall++
+          @model.save((error) ->
+            console.log error if error
+          )
         when 'resting'
           @status = new scene.Playing('working',@config.working)
       @broadcast('start',@scene())

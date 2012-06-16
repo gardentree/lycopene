@@ -37,23 +37,49 @@ config = require("./config/environments/#{process.env.NODE_ENV||'development'}")
 #---------
 socket = io.listen(app)
 
+#---------
+mongoose = require('mongoose')
+do ->
+  Schema = mongoose.Schema
+
+  mongoose.connect(process.env.MONGOHQ_URL||'mongodb://localhost/lycopene')
+  mongoose.model('Pomodoro',new Schema({
+    name:    String
+    overall: Number
+  }))
+Pomodoro = mongoose.model('Pomodoro')
+
 # Routes
-rooms = {}
+pomodoros = {}
 app.get('/',(request, response) ->
   response.render('welcome',{title:'lycopene'})
 )
 app.get('/rooms/:name',(request, response) ->
   name = request.params.name
-  unless rooms[name]
-    pomodoro = new (require('./assets/servers/pomodoro').Pomodoro)(config)
 
-    socket.of(request.originalUrl).on('connection',pomodoro.login)
+  unless pomodoros[name]
+    Pomodoro.find({name: request.params.name},(error,records) ->
+      if error
+        console.log error
+        return
+      
+      model = null
+      if records.length > 0
+        model = records[0]
+      else
+        model = new Pomodoro({
+          name:    request.params.name
+          overall: 0
+        })
+        model.save((error) ->
+          console.log error if error
+        )
+      console.log model
 
-    rooms[name] = pomodoro
-
+      pomodoro = new (require('./assets/servers/pomodoro').Pomodoro)(model,config)
+      socket.of(request.originalUrl).on('connection',pomodoro.login)
+      pomodoros[name] = pomodoro
+      
+    )
   response.render('room',{title:name})
 )
-
-setInterval(->
-  pomodoro.beat() for name,pomodoro of rooms
-,1000)

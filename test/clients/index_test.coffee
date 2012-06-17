@@ -35,19 +35,20 @@ kick = (body,setup)->
   document = jsdom("<html><body>#{body}</body></html>")
   window   = document.createWindow()
   jsdom.jQueryify(window,->
-    pomodoro = new (helper.require("servers/pomodoro").Pomodoro)({working:5,resting:5})
-
-    linkage = createLinkage()
-    pomodoro.login(linkage.server)
-
-    window.Audio = Audio
-    lycopene =
-      AudioWithLoop  :helper.require("clients/audio").AudioWithLoop
-      host           :window
-      Clock          :helper.require("clients/clock").Clock
-      ClockController:helper.require("clients/clock_controller").ClockController
-      io             :{connect:->linkage.client}
     try
+      pomodoro = new (helper.require("servers/pomodoro").Pomodoro)({working:5,resting:5})
+
+      linkage = createLinkage()
+      pomodoro.login(linkage.server)
+
+      window.Audio = Audio
+      lycopene =
+        AudioWithLoop  :helper.require("clients/audio").AudioWithLoop
+        host           :window
+        Clock          :helper.require("clients/clock").Clock
+        ClockController:helper.require("clients/clock_controller").ClockController
+        io             :{connect:->linkage.client}
+
       controller = build(lycopene,window.jQuery)
       setup(controller) if setup?
       promise.emit('success',window.jQuery)

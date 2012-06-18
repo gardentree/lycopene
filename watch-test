@@ -1,1 +1,1 @@
-vows -w -v test/**/*_test.coffee
+mocha -w test/**/*.coffee

@@ -1,5 +1,4 @@
-vows   = require('vows')
-assert = require('assert')
+should = require('should')
 helper = require('../test_helper')
 ClockController = helper.require(__filename).ClockController
 
@@ -7,16 +6,12 @@ class Socket
   on: =>
   emit: =>
 
-vows
-  .describe('ClockController')
-  .addBatch
-    'constructor':
-      topic: ->
-        new ClockController(new Socket(),{})
-      'command': (topic) ->
-        assert.isFunction(topic.start)
-        assert.isFunction(topic.stop)
-        assert.isFunction(topic.pause)
-        assert.isFunction(topic.synchronize)
+describe 'ClockController',->
+  describe 'constructor',->
+    it 'command',->
+      controller = new ClockController(new Socket(),{})
 
-  .export module
+      controller.start.should.be.a('function')
+      controller.stop.should.be.a('function')
+      controller.pause.should.be.a('function')
+      controller.synchronize.should.be.a('function')

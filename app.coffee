@@ -8,7 +8,8 @@ app = module.exports = express.createServer()
 # Configuration
 app.configure( ->
   app.set('views', __dirname + '/views')
-  app.set('view engine', 'jade')
+  app.set('view options', {layout: false})
+  app.set("view engine", "coffee")
   app.use(express.bodyParser())
   app.use(express.methodOverride())
   app.use(require('stylus').middleware({ src: __dirname + '/public' }))
@@ -16,6 +17,8 @@ app.configure( ->
   app.use(express.session({ secret: 'your secret here' }))
   app.use(app.router)
   app.use(express.static(__dirname + '/public'))
+
+  app.register '.coffee', require('coffeekup').adapters.express
 )
 
 app.configure('development', ->

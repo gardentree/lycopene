@@ -9,4 +9,4 @@ html ->
     div '#content',->
       ul ->
         for pomodoro in @pomodoros
-          li -> a href:"/rooms/#{pomodoro.name}",-> pomodoro.name
+          li -> a href:"/pomodoros/#{pomodoro.name}",-> pomodoro.name

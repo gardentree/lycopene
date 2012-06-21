@@ -13,7 +13,7 @@ html ->
     script src:'/javascripts/clock.js'
     script src:'/javascripts/clock_controller.js'
     script src:'/javascripts/audio.js'
-    script src:'/javascripts/index.js'
+    script src:'/javascripts/pomodoro.js'
   body ->
     coffeescript ->
       $(document).ready( ->

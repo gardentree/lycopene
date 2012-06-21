@@ -58,11 +58,11 @@ app.get('/',(request, response) ->
   response.render('welcome',{title:'lycopene'})
 )
 
-app.get '/rooms/',(request, response) ->
+app.get '/pomodoros/',(request, response) ->
   Pomodoro.find {},(error,records) ->
     response.render('list',{pomodoros:records})
 
-app.get('/rooms/:name',(request, response) ->
+app.get('/pomodoros/:name',(request, response) ->
   name = request.params.name
 
   unless pomodoros[name]
@@ -89,5 +89,5 @@ app.get('/rooms/:name',(request, response) ->
       pomodoros[name] = pomodoro
       
     )
-  response.render('room',{title:name})
+  response.render('pomodoro',{title:name})
 )

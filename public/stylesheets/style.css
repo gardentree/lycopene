@@ -17,9 +17,14 @@ a {
 }
 #welcome #enter #name {
   width: 50%;
-  top: 50%;
+  top: 45%;
   font-size: 24pt;
   position: relative;
+  color: #dfe8ef;
+  background-color: #000;
+  border: 1px solid #9fb6c8;
+  border-radius: 4px;
+  text-align: center;
 }
 #clock {
   margin: 0 auto;

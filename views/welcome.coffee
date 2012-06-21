@@ -10,4 +10,4 @@ html ->
   body ->
     div '#welcome',->
       form '#enter',onsubmit:"enter();return false;",->
-        input '#name',type:'text',placeholder:'enter room name'
+        input '#name',type:'text',placeholder:'enter task name'

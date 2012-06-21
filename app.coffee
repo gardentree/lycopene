@@ -57,6 +57,11 @@ pomodoros = {}
 app.get('/',(request, response) ->
   response.render('welcome',{title:'lycopene'})
 )
+
+app.get '/rooms/',(request, response) ->
+  Pomodoro.find {},(error,records) ->
+    response.render('list',{pomodoros:records})
+
 app.get('/rooms/:name',(request, response) ->
   name = request.params.name
 

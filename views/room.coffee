@@ -2,7 +2,8 @@ doctype 5
 html ->
   head ->
     title "#{@title}"
-    link rel:'stylesheet',href:'/stylesheets/style.css'
+    link rel:'stylesheet',href:'/stylesheets/lycopene.css'
+    link rel:'stylesheet',href:'/stylesheets/pomodoro.css'
     link rel:'stylesheet',href:'http://fonts.googleapis.com/css?family=Inconsolata'
     script src:'/socket.io/socket.io.js'
     coffeescript ->

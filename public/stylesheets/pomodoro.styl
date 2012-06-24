@@ -1,9 +1,16 @@
-$(property,arguments...)
-  -webkit-{property} arguments
-  -moz-{property} arguments
-  -o-{property} arguments
-  -ms-{property} arguments
-  {property} arguments
+@import 'nib'
+
+button(base,to,border)
+  border:1px solid border
+  border-radius: 5px
+  font-family:arial,helvetica,sans-serif
+  padding: 1px
+  text-shadow: -1px -1px 0 rgba(0,0,0,0.3)
+  font-weight:bold
+  text-align: center
+  color: #FFFFFF
+  background-color: base
+  background-image: linear-gradient(top, base,to)
 
 //
 #clock
@@ -73,6 +80,30 @@ $(property,arguments...)
   margin: 0px 0px 0px -1px
   border-radius: 0px 4px 4px 0px
 
+#bell
+  padding: 8px 4px 8px 4px
+  background-color: gainsboro
+  border: 1px solid
+
+  span  
+    width: 40px
+    height: 40px
+    cursor: pointer
+    display: inline-block
+    text-decoration: none
+    margin: 0px 8px 0px 8px
+  .red
+    button #ff9a9a #ff4040 #ff6767
+  .green
+    button #a9db80 #96c56f #8ed058
+  .blue
+    button #a5b8da #7089b3 #819bcb 
+  .yellow
+    button #ffd65e #febf04 #ffc92b
+  .push 
+    transition 0.5s
+    transform scale(0.8)
+
 @keyframes processing
   0%
     color: #fff
@@ -93,7 +124,7 @@ $(property,arguments...)
     top: 50%
     position:relative
     color: #fff
-    $ animation-name processing
-    $ animation-timing-function ease-in-out
-    $ animation-duration 4s
-    $ animation-iteration-count infinite
+    animation-name processing
+    animation-timing-function ease-in-out
+    animation-duration 4s
+    animation-iteration-count infinite

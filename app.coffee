@@ -2,9 +2,13 @@
 express = require('express')
 routes = require('./routes')
 io = require('socket.io')
+stylus = require('stylus')
+nib = require('nib')
 
 app = module.exports = express.createServer()
 
+compile = (str, path)->
+  return stylus(str).set('filename', path).set('compress', true).use(nib())
 # Configuration
 app.configure( ->
   app.set('views', __dirname + '/views')
@@ -12,7 +16,7 @@ app.configure( ->
   app.set("view engine", "coffee")
   app.use(express.bodyParser())
   app.use(express.methodOverride())
-  app.use(require('stylus').middleware({ src: __dirname + '/public' }))
+  app.use(require('stylus').middleware({ src: __dirname + '/public', compile: compile }))
   app.use(express.cookieParser())
   app.use(express.session({ secret: 'your secret here' }))
   app.use(app.router)

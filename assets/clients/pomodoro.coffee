@@ -1,3 +1,15 @@
+class Bell
+  constructor: (name,button)->
+    sound  = new lycopene.host.Audio("/sounds/#{name}.wav")
+    sound.addEventListener 'ended', -> button.removeClass('push')
+    sound.addEventListener 'error', -> setTimeout ->
+      button.removeClass('push')
+    ,1000
+
+    @play = ->
+      button.addClass('push')
+      sound.play()
+
 module.exports.build = (lycopene,$)->
   sound = new lycopene.host.Audio("/sounds/notify.wav")
   controller = do ->
@@ -30,7 +42,23 @@ module.exports.build = (lycopene,$)->
     )
     linkage = lycopene.io.connect(lycopene.host.location.pathname)
 
-    new lycopene.ClockController(linkage,clock)
+    controller = new lycopene.ClockController(linkage,clock)
+
+    do ->
+      bells = {}
+      $('#bell > span').each ->
+        button = $(this)
+        name = button.attr('data-name')
+        bells[name] = new Bell(name,button)
+
+      controller.ring = (bell)->
+        linkage.emit 'ring',bell.attr('data-name')
+
+      linkage.on 'ring',(name)->
+        bells[name].play()
+
+    controller
+
   controller.prepare = ->
     sound.load()
 

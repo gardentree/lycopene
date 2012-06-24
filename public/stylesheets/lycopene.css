@@ -1,9 +1,2 @@
-body {
-  background-color: #000;
-  min-width: 320px;
-  text-align: center;
-  font-family: 'Inconsolata', sans-serif;
-}
-a {
-  color: #00b7ff;
-}
+body{background-color:#000;min-width:320px;text-align:center;font-family:'Inconsolata',sans-serif}
+a{color:#00b7ff}

@@ -35,6 +35,9 @@ class Pomodoro
     client.on('ping',=>
       client.emit('ping')
     )
+    client.on('ring',(bell)=>
+      @broadcast('ring',bell)
+    )
     client.on('disconnect', =>
       console.log("disconnect #{client}")
       delete @users[client.id]

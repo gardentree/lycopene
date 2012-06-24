@@ -23,6 +23,9 @@ html ->
         window.controller = lycopene.build(lycopene,$)
         document.body.style.zoom=2
       )
+      window.ring = (source)->
+        controller.ring $(source)
+
     div '#clock',->
       div '#time',->
         span '#minute.number',-> '00'
@@ -38,6 +41,12 @@ html ->
             tr ->
               td '.label',-> 'Pomodoros overall'
               td '#overall.count',-> '0'
+
+      div '#bell',->
+        span '.yellow',onclick:'ring(this)','data-name':'coin'
+        span '.red'   ,onclick:'ring(this)','data-name':'big'
+        span '.green' ,onclick:'ring(this)','data-name':'jump'
+        span '.blue'  ,onclick:'ring(this)','data-name':'in'
 
     div '#connecting',->
       div -> 'Now Connecting...'

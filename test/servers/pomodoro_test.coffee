@@ -33,7 +33,7 @@ describe 'pomodoro',->
       client = new Client()
       new Pomodoro({},{working:WORKING,resting:RESTING}).login(client)
     it 'commands',->
-      (command for command,callback of client.callbacks).should.eql(['start','stop','pause','synchronize','ping','disconnect'])
+      (command for command,callback of client.callbacks).should.eql(['start','stop','pause','synchronize','ping','ring','disconnect'])
   describe 'login',->
     pomodoro = null
     before ->

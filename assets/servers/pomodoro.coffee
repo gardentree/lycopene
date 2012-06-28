@@ -12,7 +12,7 @@ class Pomodoro
     @status = new scene.Ready('ready',config.working)
     @config = config
     @today  = 0
-    @timer  = null 
+    @timer  = null
   broadcast: (command,data)=>
     user.emit(command,data) for id,user of @users
   scene: =>

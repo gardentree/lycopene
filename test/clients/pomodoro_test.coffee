@@ -81,14 +81,10 @@ describe 'index',->
   describe 'initialize',->
     $ = null
     before (done)->
-      kick(draft,null,(jQuery,error)->
-        if error
-          done(error)
-          return
-
-        $ = jQuery
-        done()
-      )
+      kick draft,null
+      ,(jQuery,error)->
+        if error then done(error);return
+        $ = jQuery;done()
     it 'connecting is hidden',->
       $('#connecting').css('display').should.equal('none')
     it 'time is ready',->
@@ -98,16 +94,11 @@ describe 'index',->
   describe 'start',->
     $ = null
     before (done)->
-      kick(draft,(controller)->
+      kick draft,(controller)->
         controller.start()
       ,(jQuery,error)->
-        if error
-          done(error)
-          return
-
-        $ = jQuery
-        done()
-      )
+        if error then done(error);return
+        $ = jQuery;done()
     it 'time is working',->
       $('#time').attr('class').should.equal('working')
     it 'controller is ready',->
@@ -119,17 +110,12 @@ describe 'index',->
   describe 'pause',->
     $ = null
     before (done)->
-      kick(draft,(controller)->
+      kick draft,(controller)->
         controller.start()
         controller.pause()
       ,(jQuery,error)->
-        if error
-          done(error)
-          return
-
-        $ = jQuery
-        done()
-      )
+        if error then done(error);return
+        $ = jQuery;done()
     it 'time is working',->
       $('#time').attr('class').should.equal('pausing')
     it 'controller is ready',->

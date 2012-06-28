@@ -50,7 +50,8 @@ class Pomodoro
 
     @timer = setInterval(@beat,1000) unless @timer
   beat: =>
-    if @status.remain() <= 0
+    remain = @status.remain()
+    if remain <= 0
       switch @status.state
         when 'working'
           @status = new scene.Playing('resting',@config.resting)
@@ -63,5 +64,7 @@ class Pomodoro
         when 'resting'
           @status = new scene.Playing('working',@config.working)
       @broadcast('start',@scene())
+    else if remain % 60 == 30
+      @broadcast(@status.command,@scene())
 
 module.exports.Pomodoro = Pomodoro

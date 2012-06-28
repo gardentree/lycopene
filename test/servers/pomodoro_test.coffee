@@ -3,8 +3,8 @@ sinon  = require('sinon')
 helper = require('../test_helper')
 Pomodoro = helper.require(__filename).Pomodoro
 
-WORKING = 1500
-RESTING =  300
+WORKING = 60
+RESTING = 12
 OVERALL = 3
 
 class Client
@@ -27,6 +27,12 @@ make = ->
   {pomodoro:pomodoro,client:client,save:save}
 
 describe 'pomodoro',->
+  fake   = null
+  before ->
+    fake = sinon.useFakeTimers(0)
+  after ->
+    fake.restore()
+
   describe 'initialize',->
     client = null
     before ->
@@ -64,23 +70,29 @@ describe 'pomodoro',->
   describe 'turn',->
     client = null
     save   = null
-    fake   = null
     before ->
-      fake = sinon.useFakeTimers(0)
-
       x = make()
       client = x.client
       client.callbacks['start'](WORKING)
 
       fake.tick(WORKING * 1000)
-      x.pomodoro.beat()
 
       save = x.save
     it 'verify',->
-      client.emit.callCount.should.equal(2)
-      client.emit.getCall(0).args.should.eql(['start',{state:'working',remain:WORKING,today:0,overall:OVERALL}])
-      client.emit.getCall(1).args.should.eql(['start',{state:'resting',remain:RESTING,today:1,overall:OVERALL + 1}])
+      client.emit.callCount.should.equal(3)
+      client.emit.getCall(0).args.should.eql(['start',{state:'working',remain:WORKING     ,today:0,overall:OVERALL}])
+      client.emit.getCall(1).args.should.eql(['start',{state:'working',remain:WORKING - 30,today:0,overall:OVERALL}])
+      client.emit.getCall(2).args.should.eql(['start',{state:'resting',remain:RESTING     ,today:1,overall:OVERALL + 1}])
     it 'call save',->
       save.calledWith().should.be.true
-    after ->
-      fake.restore()
+  describe 'synchronize',->
+    client = null
+    before ->
+      x = make()
+      client = x.client
+      client.callbacks['start'](WORKING)
+      fake.tick(30 * 1000)
+    it 'verify',->
+      client.emit.callCount.should.equal(2)
+      (client.emit.getCall(0).args).should.eql(['start',{state:'working',remain:WORKING     ,today:0,overall:OVERALL}])
+      (client.emit.getCall(1).args).should.eql(['start',{state:'working',remain:WORKING - 30,today:0,overall:OVERALL}])

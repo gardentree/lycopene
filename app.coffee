@@ -42,7 +42,7 @@ app.listen(port, ->
 config = require("./config/environments/#{process.env.NODE_ENV||'development'}")
 
 #---------
-socket = io.listen(app)
+socket = io.listen(app,{'log level': 2})
 
 #---------
 mongoose = require('mongoose')

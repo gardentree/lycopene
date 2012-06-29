@@ -14,6 +14,7 @@ class Pomodoro
     @today  = 0
     @timer  = null
   broadcast: (command,data)=>
+    console.info @model.name,command,data
     user.emit(command,data) for id,user of @users
   scene: =>
     state  :@status.state
@@ -21,6 +22,7 @@ class Pomodoro
     today  :@today
     overall:@model.overall
   login: (client)=>
+    console.info @model.name,'login',client.id
     @users[client.id] = client
 
     for command in ['start','stop','pause']
@@ -39,7 +41,7 @@ class Pomodoro
       @broadcast('ring',bell)
     )
     client.on('disconnect', =>
-      console.log("disconnect #{client}")
+      console.info @model.name,'disconnect',client.id
       delete @users[client.id]
 
       if isEmpty(@users)

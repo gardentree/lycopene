@@ -8,6 +8,7 @@ html ->
     coffeescript ->
       window.enter = ->
         window.location.href = "/pomodoros/#{$('#name').val()}"
+    script src:'/javascripts/analytics.js'
   body ->
     div '#welcome',->
       form '#enter',onsubmit:"enter();return false;",->

@@ -14,6 +14,7 @@ html ->
     script src:'/javascripts/clock_controller.js'
     script src:'/javascripts/audio.js'
     script src:'/javascripts/pomodoro.js'
+    script src:'/javascripts/analytics.js'
   body ->
     coffeescript ->
       $(document).ready( ->

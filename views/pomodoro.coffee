@@ -1,7 +1,7 @@
 doctype 5
 html ->
   head ->
-    title "#{@title}"
+    title "lycopene - #{@title}"
     link rel:'stylesheet',href:'/stylesheets/lycopene.css'
     link rel:'stylesheet',href:'/stylesheets/pomodoro.css'
     link rel:'stylesheet',href:'http://fonts.googleapis.com/css?family=Inconsolata'

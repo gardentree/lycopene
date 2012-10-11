@@ -18,11 +18,12 @@ html ->
   body ->
     coffeescript ->
       $(document).ready( ->
+        $('#clock').addClass($('#zoom').val())
+
         lycopene.host = window
         lycopene.io   = io
 
         window.controller = lycopene.build(lycopene,$)
-        document.body.style.zoom=2
       )
       window.ring = (source)->
         controller.ring $(source)
@@ -57,6 +58,9 @@ html ->
         button '#button1.button',onclick:'controller.stop();',-> 'Stop'
       div '#pausing',->
         button '#button1.button',onclick:'controller.start();',-> 'Start'
+
+      div ->
+        input '#zoom',value:"#{@zoom}"
 
       div '#bell',->
         span '.yellow',onclick:'ring(this)','data-name':'coin'

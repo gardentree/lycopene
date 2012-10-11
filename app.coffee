@@ -59,7 +59,7 @@ Pomodoro = mongoose.model('Pomodoro')
 # Routes
 pomodoros = {}
 app.get('/',(request, response) ->
-  response.render('welcome',{title:'lycopene'})
+  response.render('welcome',{title:'lycopene',zoom:request.query.zoom})
 )
 
 app.get '/pomodoros/',(request, response) ->
@@ -93,5 +93,5 @@ app.get('/pomodoros/:name',(request, response) ->
       pomodoros[name] = pomodoro
       
     )
-  response.render('pomodoro',{title:name})
+  response.render('pomodoro',{title:name,zoom:request.query.zoom||'expand'})
 )

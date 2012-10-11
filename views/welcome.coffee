@@ -7,9 +7,10 @@ html ->
     script src:'/javascripts/jquery-1.7.1.min.js'
     coffeescript ->
       window.enter = ->
-        window.location.href = "/pomodoros/#{$('#name').val()}"
+        window.location.href = "/pomodoros/#{$('#name').val()}#{if $('#zoom').val() then '?zoom=' + $('#zoom').val() else ''}"
     script src:'/javascripts/analytics.js'
   body ->
     div '#welcome',->
       form '#enter',onsubmit:"enter();return false;",->
         input '#name',type:'text',placeholder:'enter task name'
+        input '#zoom',type:'hidden',value:"#{@zoom}" if @zoom

@@ -3,11 +3,11 @@
   , "version": "0.0.1"
   , "private": true
   , "engines": {
-      "node": ">=0.4.7 <0.7.0"
+      "node": ">=0.8.0 <0.9.0"
     , "npm": ">=1.0.0"
   }
   , "dependencies": {
-      "express"      : "2.5.2"
+      "express"      : "2.5.11"
     , "coffee-script": ">=0.0.1"
     , "socket.io"    : ">=0.0.1"
     , "coffeekup"    : ">=0.0.1"
